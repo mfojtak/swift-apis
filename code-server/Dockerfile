@@ -22,7 +22,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libncurses5-dev \
         libxml2 \
         libblocksruntime-dev \
-	libpython3.6-dev
+	libpython3.6-dev \
+	libsqlite3-dev
 
 # Download and extract S4TF
 WORKDIR /swift-tensorflow-toolchain
@@ -40,7 +41,13 @@ RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf
     ldconfig
 
 ENV PATH="/swift-tensorflow-toolchain/usr/bin:${PATH}"
+ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-tensorflow-toolchain
+
 WORKDIR /temp
+
+RUN git clone https://github.com/apple/sourcekit-lsp.git && cd sourcekit-lsp && \
+    swift package update && swift build -Xcxx -I/swift-tensorflow-toolchain/usr/lib/swift
+
 ENV CODE_VERSION=1.32.0-310
 RUN curl -fSsL https://github.com/codercom/code-server/releases/download/$CODE_VERSION/code-server-$CODE_VERSION-linux-x64.tar.gz -o code-server.tar.gz && \
     tar xvzf code-server.tar.gz && \
