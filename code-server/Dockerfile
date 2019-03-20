@@ -21,7 +21,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libicu-dev \
         libncurses5-dev \
         libxml2 \
-        libblocksruntime-dev
+        libblocksruntime-dev \
+	libpython3.6-dev
 
 # Download and extract S4TF
 WORKDIR /swift-tensorflow-toolchain
