@@ -38,9 +38,6 @@ COPY . .
 RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf.d/cuda-10.0-stubs.conf && \
     ldconfig
 
-# Run SwiftPM tests
-ENV PATH="/swift-tensorflow-toolchain/usr/bin:${PATH}"
-
 WORKDIR /temp
 ENV CODE_VERSION=1.32.0-310
 RUN curl -fSsL https://github.com/codercom/code-server/releases/download/$CODE_VERSION/code-server-$CODE_VERSION-linux-x64.tar.gz -o code-server.tar.gz && \
