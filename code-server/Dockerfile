@@ -46,7 +46,8 @@ ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-tensorflow-toolchain
 WORKDIR /temp
 
 RUN git clone https://github.com/apple/sourcekit-lsp.git && cd sourcekit-lsp && \
-    swift package update && swift build -Xcxx -I/swift-tensorflow-toolchain/usr/lib/swift
+    swift package update && swift build -Xcxx -I/swift-tensorflow-toolchain/usr/lib/swift && \
+    mv .build/debug/sourcekit-lsp /usr/local/bin
 
 ENV CODE_VERSION=1.32.0-310
 RUN curl -fSsL https://github.com/codercom/code-server/releases/download/$CODE_VERSION/code-server-$CODE_VERSION-linux-x64.tar.gz -o code-server.tar.gz && \
