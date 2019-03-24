@@ -48,7 +48,7 @@ RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf
     ldconfig
 
 ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-toolchain
-ENV PATH="$SOURCEKIT_TOOLCHAIN_PATH/usr/bin:${PATH}"
+ENV PATH="/swift-toolchain/usr/bin:${PATH}"
 
 WORKDIR /temp
 
