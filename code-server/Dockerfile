@@ -4,6 +4,7 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 
 # Allows the caller to specify the toolchain to use.
 ARG swift_tf_url=https://storage.googleapis.com/s4tf-kokoro-artifact-testing/latest/swift-tensorflow-DEVELOPMENT-cuda10.0-cudnn7-ubuntu18.04.tar.gz
+ARG swift_url=https://swift.org/builds/development/ubuntu1804/swift-DEVELOPMENT-SNAPSHOT-2019-03-17-a/swift-DEVELOPMENT-SNAPSHOT-2019-03-17-a-ubuntu18.04.tar.gz
 
 # Install Swift deps.
 ENV DEBIAN_FRONTEND=noninteractive
@@ -32,6 +33,12 @@ RUN curl -fSsL $swift_tf_url -o swift.tar.gz \
     && tar -xzf swift.tar.gz --directory=usr --strip-components=1 \
     && rm swift.tar.gz
 
+WORKDIR /swift-toolchain
+RUN curl -fSsL $swift_url -o swift.tar.gz \
+    && mkdir usr \
+    && tar -xzf swift.tar.gz --directory=usr --strip-components=1 \
+    && rm swift.tar.gz
+
 # Copy the kernel into the container
 WORKDIR /swift-apis
 COPY . .
@@ -40,13 +47,13 @@ COPY . .
 RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf.d/cuda-10.0-stubs.conf && \
     ldconfig
 
-ENV PATH="/swift-tensorflow-toolchain/usr/bin:${PATH}"
-ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-tensorflow-toolchain
+ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-toolchain
+ENV PATH="$SOURCEKIT_TOOLCHAIN_PATH/usr/bin:${PATH}"
 
 WORKDIR /temp
 
 RUN git clone https://github.com/apple/sourcekit-lsp.git && cd sourcekit-lsp && \
-    swift package update && swift build -Xcxx -I/swift-tensorflow-toolchain/usr/lib/swift && \
+    swift package update && swift build -Xcxx -I/$SOURCEKIT_TOOLCHAIN_PATH/usr/lib/swift && \
     mv .build/debug/sourcekit-lsp /usr/local/bin
 
 ENV CODE_VERSION=1.32.0-310
