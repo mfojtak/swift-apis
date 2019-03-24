@@ -47,8 +47,8 @@ COPY . .
 RUN echo "/usr/local/cuda-10.0/targets/x86_64-linux/lib/stubs" > /etc/ld.so.conf.d/cuda-10.0-stubs.conf && \
     ldconfig
 
-ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-toolchain
-ENV PATH="/swift-toolchain/usr/bin:${PATH}"
+ENV SOURCEKIT_TOOLCHAIN_PATH=/swift-tensorflow-toolchain
+ENV PATH="/swift-tensorflow-toolchain/usr/bin:${PATH}"
 
 WORKDIR /temp
 
