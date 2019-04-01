@@ -56,9 +56,9 @@ RUN git clone https://github.com/apple/sourcekit-lsp.git && cd sourcekit-lsp && 
     swift package update && swift build -Xcxx -I/$SOURCEKIT_TOOLCHAIN_PATH/usr/lib/swift && \
     mv .build/debug/sourcekit-lsp /usr/local/bin
 
-ENV CODE_VERSION=1.32.0-310
-RUN curl -fSsL https://github.com/codercom/code-server/releases/download/$CODE_VERSION/code-server-$CODE_VERSION-linux-x64.tar.gz -o code-server.tar.gz && \
+ENV CODE_VERSION=1.408-vsc1.32.0
+RUN curl -fSsL https://github.com/codercom/code-server/releases/download/$CODE_VERSION/code-server$CODE_VERSION-linux-x64.tar.gz -o code-server.tar.gz && \
     tar xvzf code-server.tar.gz && \
-    cp code-server-$CODE_VERSION-linux-x64/code-server /usr/bin/
+    cp code-server$CODE_VERSION-linux-x64/code-server /usr/bin/
 EXPOSE 8443
 ENTRYPOINT ["code-server"]
